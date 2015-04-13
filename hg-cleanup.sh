@@ -124,6 +124,8 @@ hg tag -r f0915ae869cf v7-3-001
 hg tag -r 2e72d84e8965 v7-3-139
 hg tag -r 96a7b564c2f3 v7-3-140
 hg tag -r 0d201adaf9c5 v7-3-141
+# The following tags could not be created because the changeset is combined
+# with the changeset of the subsequent patch: v7-1-083 v7-2-054
 
 # Optionally squash all separate tag adding commits into one
 # with a proper description
