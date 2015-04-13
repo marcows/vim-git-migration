@@ -8,7 +8,7 @@
 hg update -C vim
 hg commit --close-branch -m"Close invalid branch 'vim'"
 hg update -C vim72
-hg commit --close-branch -m"Close old branch 'vim72'"
+hg commit --close-branch -m"Close unused branch 'vim72'"
 hg update -C vim73
 hg commit --close-branch -m"Close old branch 'vim73'"
 hg update -C default
