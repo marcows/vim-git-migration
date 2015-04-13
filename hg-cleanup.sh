@@ -19,7 +19,7 @@ hg update -C default
 # However, since the network protocol works append-only, you cannot push it
 # to the public repo. This would have to be done directly on the server via SSH
 # or an admin interface.
-# And still this change would have no effect when pulling into existing
+# And still this change would have no effect when pulling from existing
 # clones, it would have to be stripped there as well, so ignore this step.
 #hg strip vim
 #hg strip vim72
