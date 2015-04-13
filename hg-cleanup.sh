@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Vim HG repository cleanup
+
 # close stale branches, switch back to default branch afterwards
 # This has the slightly bad visual side-effect of parallel development from the
 # previous branch head up to the corresponding closing commit in "hg log
