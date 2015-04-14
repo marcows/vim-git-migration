@@ -80,6 +80,7 @@ hg update -C default
 # thing, see
 #   http://mercurial.selenic.com/wiki/Tag
 #   http://mercurial.selenic.com/wiki/TagDesign
+hg tag -f --local rebasedest
 hg tag -f -r 2ec8266fa254f9f90fd302df275d2813ae08a8e6 v7-0-225
 hg tag -f -r 042fa969dab175d414d611425d8a61424bacf75f v7-1-008
 hg tag -f -r 12cecc379574aba2231cbba54c4eaeef3432db69 v7-2-080
@@ -112,13 +113,14 @@ matched version 7.2.167.
 The others have been moved to the correct changeset.
 EOF
 
-hg rebase --dest tip~19 --source tip~18 --collapse --logfile logfile.txt
+hg rebase --dest rebasedest --source tip~18 --collapse --logfile logfile.txt
 rm logfile.txt
 
 # remove unused tag
 hg tag -m"Remove unused tag from invalid line of history" --remove start
 
 # add missing tags
+hg tag -f --local rebasedest
 hg tag -r f03c3fae0a99 v7-0-076
 hg tag -r v7-2-000 v7-2
 hg tag -r ee53a39d5896 v7-3
@@ -131,4 +133,7 @@ hg tag -r 0d201adaf9c5 v7-3-141
 
 # Optionally squash all separate tag adding commits into one
 # with a proper description
-hg rebase --dest tip~7 --source tip~6 --collapse -m"Add missing tags"
+hg rebase --dest rebasedest --source tip~6 --collapse -m"Add missing tags"
+
+# cleanup
+hg tag --local --remove rebasedest
