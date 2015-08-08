@@ -2,6 +2,8 @@
 
 # Vim HG repository cleanup
 
+hg config extensions.rebase || (echo -e "Rebase extension has to be enabled in ~/.hgrc:\n[extensions]\nrebase =" && exit 1)
+
 # close stale branches, switch back to default branch afterwards
 # This has the slightly bad visual side-effect of parallel development from the
 # previous branch head up to the corresponding closing commit in "hg log
