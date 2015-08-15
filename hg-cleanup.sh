@@ -59,6 +59,7 @@ hg update -C default
 
 # determine the actually wrong tags after manual inspection
 # v7-4-415
+# v7-3-143
 # v7-2-446
 # v7-2-443
 # v7-2-442
@@ -99,6 +100,7 @@ hg tag -f -r f838615313cd5832efa624526a7575668fb40da9 v7-2-441
 hg tag -f -r b0ebf9d121ff99eb2e1697a35dca528e7ecb8f4c v7-2-442
 hg tag -f -r 0c1e413c32f1f3f8e28ebf8a030cedeeb664cd46 v7-2-443
 hg tag -f -r b619655b31db9469f6fe41932daff7a566079097 v7-2-446
+hg tag -f -r afb476746692322523f167c218803317b87623e3 v7-3-143
 hg tag -f -r 353442863d8558dc89d35ef349b60ebb2e38de0e v7-4-415
 hg tag -r v7-2-167fix v7-2-167
 hg tag --remove v7-2-167fix
@@ -115,7 +117,7 @@ matched version 7.2.167.
 The others have been moved to the correct changeset.
 EOF
 
-hg rebase --dest rebasedest --source tip~18 --collapse --logfile logfile.txt
+hg rebase --dest rebasedest --source tip~19 --collapse --logfile logfile.txt
 rm logfile.txt
 
 # remove unused tag
