@@ -2,6 +2,23 @@
 
 # Vim Git repository cleanup
 
+# remove invalid, unused and old branches
+git branch -D vim vim72 vim73
+
+# find empty commits
+# for sha in $(git rev-list --min-parents=1 --max-parents=1 --all) ; do if [ $(git rev-parse ${sha}^{tree}) == $(git rev-parse ${sha}^1^{tree} ) ]; then echo $sha; fi; done > empty-commits.txt
+# This one also has a tag v7-3-143:
+#   8a13d97 Remove tag.
+# git show $(<empty-commits.txt) --oneline
+# git show $(<empty-commits.txt) --oneline --decorate |vim -
+# what does filter-branch do in this case?
+
+# remove empty commits, mostly the .hgtags commits
+
+# remove 6 commits from the 7.2 branch, only meant for 7.3
+#   from "First step in the Vim 7.3 branch."
+#   till "Undo changes that are meant for the Vim 7.3 branch."
+
 ##############
 #  - git-filter-branch und git-rebase machen tags kaputt
 #    so klappt es: git filter-branch -f --tree-filter 'rm -f .hgignore' HEAD~5.. --tags
@@ -11,6 +28,3 @@
 # siehe meine erste Mail vom April für mehrere Punkte
 
 # replace .hgignore with .gitignore
-
-# falsche commits "First step 7.3" bis "Undo changes meant for 7.3" im 7.2 branch könnten eliminiert werden
-
