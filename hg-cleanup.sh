@@ -148,14 +148,27 @@ hg tag -r 0d201adaf9c5 v7-3-141
 # with a proper description
 hg rebase --dest rebasedest --source tip~6 --collapse -m"Add missing tags"
 
-# rename tags: replace - by .
-hg tag -f --local rebasedest
-echo "Renaming all tags, took about 1 second per tag for me (63 minutes) + additional 41 minutes for rebasing ..."
-for i in `hg tags | awk '/^v7-/ {print $1}'`; do hg tag -r $i ${i//-/.} && hg tag --remove $i; done
+## rename tags: replace - by .
+#hg tag -f --local rebasedest
+#echo "Renaming all tags, took about 1 second per tag for me (63 minutes) + additional 41 minutes for rebasing ..."
+#for i in `hg tags | awk '/^v7-/ {print $1}'`; do hg tag -r $i ${i//-/.} && hg tag --remove $i; done
+#
+## Optionally squash all separate tag changing commits into one
+## with a proper description
+#hg rebase --dest rebasedest --source "children(rebasedest)" --collapse -m"Rename tags to match the normal version notation"
 
-# Optionally squash all separate tag changing commits into one
-# with a proper description
-hg rebase --dest rebasedest --source "children(rebasedest)" --collapse -m"Rename tags to match the normal version notation"
+# rename tags: replace - by .
+# For speed purposes do it manually instead of using "hg tag", but keep identical output
+for i in `hg tags --debug | awk '/^v7-/ {print $1 ":" $2}'`; do
+    # input example: $i=v7-4-119:5541:2f99966971b0556bc302ec809712f5ba3f030028
+    REV=${i/*:/}
+    OLD_TAG=${i/:*/}
+    NEW_TAG=${OLD_TAG//-/.}
+    echo "$REV $NEW_TAG" >> .hgtags
+    echo "$REV $OLD_TAG" >> .hgtags
+    echo "0000000000000000000000000000000000000000 $OLD_TAG" >> .hgtags
+    hg commit -m"Rename tags to match the normal version notation"
+done
 
 # cleanup
 hg tag --local --remove rebasedest
