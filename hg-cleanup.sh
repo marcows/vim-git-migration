@@ -151,7 +151,7 @@ hg rebase --dest rebasedest --source tip~6 --collapse -m"Add missing tags"
 # rename tags: replace - by .
 hg tag -f --local rebasedest
 echo "Renaming all tags, took about 1 second per tag for me (63 minutes) + additional 41 minutes for rebasing ..."
-for i in `hg tags | awk /^v7-/'{print $1}'`; do hg tag -r $i ${i//-/.} && hg tag --remove $i; done
+for i in `hg tags | awk '/^v7-/ {print $1}'`; do hg tag -r $i ${i//-/.} && hg tag --remove $i; done
 
 # Optionally squash all separate tag changing commits into one
 # with a proper description
