@@ -1,6 +1,12 @@
 #!/bin/sh
 
 # Vim HG repository cleanup
+#
+# Overview:
+# - close stale branches
+# - fix wrong tags
+# - remove unused tags
+# - add missing tags
 
 hg config extensions.rebase || { echo -e "Rebase extension has to be enabled in ~/.hgrc:\n[extensions]\nrebase =" && exit 1; }
 
