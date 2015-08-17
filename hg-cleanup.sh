@@ -162,11 +162,9 @@ hg rebase --dest rebasedest --source tip~6 --collapse -m"Add missing tags"
 for i in `hg tags --debug | awk '/^v7-/ {print $1 ":" $2}'`; do
     # input example: $i=v7-4-119:5541:2f99966971b0556bc302ec809712f5ba3f030028
     REV=${i/*:/}
-    OLD_TAG=${i/:*/}
-    NEW_TAG=${OLD_TAG//-/.}
-    echo "$REV $NEW_TAG" >> .hgtags
-    echo "$REV $OLD_TAG" >> .hgtags
-    echo "0000000000000000000000000000000000000000 $OLD_TAG" >> .hgtags
+    OLDTAG=${i/:*/}
+    NEWTAG=${OLDTAG//-/.}
+    echo -e "$REV $NEWTAG\n$REV $OLDTAG\n0000000000000000000000000000000000000000 $OLDTAG" >> .hgtags
     hg commit -m"Rename tags to match the normal version notation"
 done
 
