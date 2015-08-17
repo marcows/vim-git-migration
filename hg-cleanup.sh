@@ -167,8 +167,8 @@ for i in `hg tags --debug | awk '/^v7-/ {print $1 ":" $2}'`; do
     echo "$REV $NEW_TAG" >> .hgtags
     echo "$REV $OLD_TAG" >> .hgtags
     echo "0000000000000000000000000000000000000000 $OLD_TAG" >> .hgtags
-    hg commit -m"Rename tags to match the normal version notation"
 done
+hg commit -m"Rename tags to match the normal version notation"
 
 # cleanup
 hg tag --local --remove rebasedest
