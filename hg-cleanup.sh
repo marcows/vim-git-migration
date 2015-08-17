@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Vim HG repository cleanup
 #
@@ -7,6 +7,9 @@
 # - fix wrong tags
 # - remove unused tags
 # - add missing tags
+# - rename tags: replace - by .
+
+set -e
 
 hg config extensions.rebase || { echo -e "Rebase extension has to be enabled in ~/.hgrc:\n[extensions]\nrebase =" && exit 1; }
 
@@ -144,6 +147,15 @@ hg tag -r 0d201adaf9c5 v7-3-141
 # Optionally squash all separate tag adding commits into one
 # with a proper description
 hg rebase --dest rebasedest --source tip~6 --collapse -m"Add missing tags"
+
+# rename tags: replace - by .
+hg tag -f --local rebasedest
+echo "Renaming all tags, took about 1 second per tag for me (63 minutes) + additional 41 minutes for rebasing ..."
+for i in `hg tags | awk /^v7-/'{print $1}'`; do hg tag -r $i ${i//-/.} && hg tag --remove $i; done
+
+# Optionally squash all separate tag changing commits into one
+# with a proper description
+hg rebase --dest rebasedest --source "children(rebasedest)" --collapse -m"Rename tags to match the normal version notation"
 
 # cleanup
 hg tag --local --remove rebasedest
