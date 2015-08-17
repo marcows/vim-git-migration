@@ -4,11 +4,11 @@
 #
 # Overview:
 # - remove stale branches
+# - unify name and mail for author and commiter
+# - replace .hgignore with .gitignore
+# - replace tabs with spaces in commit messages
 # - remove empty commits
 # - remove 6 commits from the 7.2 branch, only meant for 7.3
-# - unify name and mail for author and commiter
-# - replace tabs with spaces in commit messages
-# - replace .hgignore with .gitignore
 
 set -e
 
@@ -22,6 +22,23 @@ git branch -D vim vim72 vim73
 
 # rewrite history
 git filter-branch
+    # unify name and mail for author and commiter,
+    # see "git shortlog --email --summary"
+    --env-filter '
+        GIT_COMMITTER_NAME="Bram Moolenaar"
+        GIT_COMMITTER_EMAIL="Bram@vim.org"
+        GIT_AUTHOR_NAME="$GIT_COMMITTER_NAME"
+        GIT_AUTHOR_EMAIL="$GIT_COMMITTER_EMAIL"
+        export GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL
+        export GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL
+    '
+
+    # replace .hgignore with .gitignore
+    --tree-filter 'test -f .hgignore && sed -e "/syntax: glob/,+1d" .hgignore > .gitignore && rm .hgignore'
+
+    # replace tabs with spaces in commit messages
+    --msg-filter 'expand'
+
     # remove 6 commits from the 7.2 branch, only meant for 7.3
     #   from "First step in the Vim 7.3 branch."
     #   till "Undo changes that are meant for the Vim 7.3 branch."
@@ -40,22 +57,5 @@ git filter-branch
             git_commit_non_empty_tree "$@"
         fi
     '
-
-    # unify name and mail for author and commiter,
-    # see "git shortlog --email --summary"
-    --env-filter '
-        GIT_COMMITTER_NAME="Bram Moolenaar"
-        GIT_COMMITTER_EMAIL="Bram@vim.org"
-        GIT_AUTHOR_NAME="$GIT_COMMITTER_NAME"
-        GIT_AUTHOR_EMAIL="$GIT_COMMITTER_EMAIL"
-        export GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL
-        export GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL
-    '
-
-    # replace tabs with spaces in commit messages
-    --msg-filter 'expand'
-
-    # replace .hgignore with .gitignore
-    --tree-filter 'test -f .hgignore && sed -e "/syntax: glob/,+1d" .hgignore > .gitignore && rm .hgignore'
 
     -- --all
