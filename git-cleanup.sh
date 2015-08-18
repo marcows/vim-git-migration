@@ -9,6 +9,7 @@
 # - replace tabs with spaces in commit messages
 # - remove empty commits
 # - remove 6 commits from the 7.2 branch, only meant for 7.3
+# - optimize the packfiles
 
 set -e
 
@@ -63,7 +64,7 @@ git filter-branch \
     ' \
     -- --all
 
-# cleanup
+# cleanup: remove backup refs from filter-branch
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 git reflog expire --expire=now --all
 
