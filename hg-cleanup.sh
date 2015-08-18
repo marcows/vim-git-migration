@@ -170,3 +170,5 @@ hg commit -m"Rename tags to match the normal version notation"
 
 # cleanup
 hg tag --local --remove rebasedest
+
+echo "HG repo cleanup finished"

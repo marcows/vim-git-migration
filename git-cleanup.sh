@@ -62,3 +62,5 @@ git filter-branch \
         fi
     ' \
     -- --all
+
+echo "Git repo cleanup finished"
