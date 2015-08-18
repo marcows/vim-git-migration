@@ -16,7 +16,7 @@ set -e
 git branch -D vim vim72 vim73
 
 # find empty commits
-#for sha in $(git rev-list --min-parents=1 --max-parents=1 --all) ; do if [ $(git rev-parse ${sha}^{tree}) == $(git rev-parse ${sha}^1^{tree} ) ]; then echo $sha; fi; done > empty-commits.txt
+#for sha in $(git rev-list --min-parents=1 --max-parents=1 master) ; do if [ $(git rev-parse ${sha}^{tree}) == $(git rev-parse ${sha}^1^{tree} ) ]; then echo $sha; fi; done > empty-commits.txt
 # manually check if the empty commits can be removed without problems, not tags must point to them
 #git show $(<empty-commits.txt) --oneline --decorate | vim -
 
