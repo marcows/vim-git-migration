@@ -21,29 +21,29 @@ git branch -D vim vim72 vim73
 #git show $(<empty-commits.txt) --oneline --decorate | vim -
 
 # rewrite history
-git filter-branch
-    # unify name and mail for author and commiter,
-    # see "git shortlog --email --summary"
+git filter-branch \
     --env-filter '
+        # unify name and mail for author and commiter,
+        # see "git shortlog --email --summary"
         GIT_COMMITTER_NAME="Bram Moolenaar"
         GIT_COMMITTER_EMAIL="Bram@vim.org"
         GIT_AUTHOR_NAME="$GIT_COMMITTER_NAME"
         GIT_AUTHOR_EMAIL="$GIT_COMMITTER_EMAIL"
         export GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL
         export GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL
-    '
-
-    # replace .hgignore with .gitignore
-    --tree-filter 'test -f .hgignore && sed -e "/syntax: glob/,+1d" .hgignore > .gitignore && rm .hgignore'
-
-    # replace tabs with spaces in commit messages
-    --msg-filter 'expand'
-
-    # remove 6 commits from the 7.2 branch, only meant for 7.3
-    #   from "First step in the Vim 7.3 branch."
-    #   till "Undo changes that are meant for the Vim 7.3 branch."
-    #
-    # remove empty commits, most from handling of tags and branches
+    ' \
+    --tree-filter '
+        # replace .hgignore with .gitignore
+        if test -f .hgignore
+        then
+            sed -e "/syntax: glob/,+1d" .hgignore > .gitignore
+            rm .hgignore
+        fi
+    ' \
+    --msg-filter '
+        # replace tabs with spaces in commit messages
+        expand
+    ' \
     --commit-filter '
         if test \( "$GIT_COMMIT" = `git rev-parse v7.2.434~6` \) \
              -o \( "$GIT_COMMIT" = `git rev-parse v7.2.434~5` \) \
@@ -52,10 +52,13 @@ git filter-branch
              -o \( "$GIT_COMMIT" = `git rev-parse v7.2.434~2` \) \
              -o \( "$GIT_COMMIT" = `git rev-parse v7.2.434~1` \)
         then
+            # remove 6 commits from the 7.2 branch, only meant for 7.3
+            #   from "First step in the Vim 7.3 branch."
+            #   till "Undo changes that are meant for the Vim 7.3 branch."
             skip_commit "$@"
         else
+            # remove empty commits, most from handling of tags and branches
             git_commit_non_empty_tree "$@"
         fi
-    '
-
+    ' \
     -- --all
